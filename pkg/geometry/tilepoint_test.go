@@ -17,7 +17,14 @@ func TestTilePoint_ToLatLng(t *testing.T) {
 		{
 			name: "test",
 			fields: fields{
-				tilePoint: NewTilePoint(1158148, 667418, 21, 127, 127),
+				tilePoint: &TilePoint{
+					TileSize: 256,
+					TileX:    1158148,
+					TileY:    667418,
+					Zoom:     21,
+					PxX:      127,
+					PxY:      127,
+				},
 			},
 			want: LatLng{
 				Lat: 54.59489282994036,

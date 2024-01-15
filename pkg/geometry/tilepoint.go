@@ -2,28 +2,13 @@ package geometry
 
 import "math"
 
-const TILE_SIZE = 256
-
 type TilePoint struct {
-	TileX int
-	TileY int
-	Zoom  int
-	PxX   int
-	PxY   int
-
-	linearZoom float64
-}
-
-func NewTilePoint(tileX, tileY, zoom, pxX, pxY int) *TilePoint {
-	return &TilePoint{
-		TileX: tileX,
-		TileY: tileY,
-		Zoom:  zoom,
-		PxX:   pxX,
-		PxY:   pxY,
-
-		linearZoom: float64(int(1) << zoom),
-	}
+	TileX    int
+	TileY    int
+	Zoom     int
+	PxX      int
+	PxY      int
+	TileSize int
 }
 
 func (t *TilePoint) ToLatLng() LatLng {
@@ -36,12 +21,13 @@ func (t *TilePoint) ToLatLng() LatLng {
 }
 
 func (t *TilePoint) toAbsolutePx() (int, int) {
-	return t.TileX*TILE_SIZE + t.PxX, t.TileY*TILE_SIZE + t.PxY
+	return t.TileX*t.TileSize + t.PxX, t.TileY*t.TileSize + t.PxY
 }
 
 func (t *TilePoint) toNoramlizedXY() (float64, float64) {
 	absPxX, absPxY := t.toAbsolutePx()
+	linearZoom := 1 << t.Zoom
 
-	return float64(absPxX) / (TILE_SIZE * t.linearZoom),
-		float64(absPxY) / (TILE_SIZE * t.linearZoom)
+	return float64(absPxX) / float64(t.TileSize*linearZoom),
+		float64(absPxY) / float64(t.TileSize*linearZoom)
 }
